@@ -1,20 +1,23 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { StatusBar } from "expo-status-bar";
+import Navigation from "./src/navigation";
+import * as React from "react";
+
+import { CartProvider } from "./src/contexts/CartContext";
+
+// import { combineReducers, applyMiddleware } from "redux";
+// import { configureStore } from "@reduxjs/toolkit";
+// import { Provider } from "react-redux";
+
+// const rootReducer = combineReducers({
+//   store: productReducer,
+//   cart: cartReducer
+// })
 
 export default function App() {
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <CartProvider>
+      <StatusBar />
+      <Navigation />
+    </CartProvider>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
