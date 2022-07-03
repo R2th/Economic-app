@@ -38,6 +38,7 @@ const TabScreen = () => {
           }
           return <AntDesign name={iconName} size={28} color={color} />;
         },
+        headerShown: false,
       })}
       barStyle={{
         backgroundColor: "#000",

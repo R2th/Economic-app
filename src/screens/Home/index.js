@@ -6,6 +6,7 @@ import {
   Image,
   ScrollView,
   Platform,
+  SafeAreaView,
 } from "react-native";
 // import styles from "../../../App.module.css";
 import CustomText from "../../components/UI/CustomText";
@@ -19,7 +20,7 @@ const HomeScreen = () => {
   const { state, action } = React.useContext(CartContext);
 
   return (
-    <View style={{ backgroundColor: "white" }}>
+    <SafeAreaView style={{ backgroundColor: "white", marginTop: 20 }}>
       <View style={styles.halfCircle}></View>
       <View style={styles.card}>
         <View style={styles.halfCircle2}></View>
@@ -108,7 +109,7 @@ const HomeScreen = () => {
           </ScrollView>
         </View>
       </View>
-    </View>
+    </SafeAreaView>
   );
 };
 
