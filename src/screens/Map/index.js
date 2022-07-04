@@ -1,6 +1,7 @@
 import * as React from "react";
 import { View, StyleSheet } from "react-native";
 import MapView, { Marker } from "react-native-maps";
+import * as Location from "expo-location";
 
 const markers = [
   // {
@@ -29,60 +30,61 @@ const markers = [
   },
 ];
 
-const MapScreen = ({ navigator }) => {
-  const [initialRegion, setInitialRegion] = React.useState();
-
-  const goToInitialLocation = () => {
-    let initialRegion = Object.assign({}, this.state.initialRegion);
-    initialRegion["latitudeDelta"] = 0.005;
-    initialRegion["longitudeDelta"] = 0.005;
-    this.mapView.animateToRegion(initialRegion, 2000);
-  };
+const MapScreen = () => {
+  const [position, setPosition] = React.useState();
 
   React.useEffect(() => {
-    const getCurrentLocation = async () => {
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
-          let region = {
-            latitude: parseFloat(position.coords.latitude),
-            longitude: parseFloat(position.coords.longitude),
-            latitudeDelta: 5,
-            longitudeDelta: 5,
-          };
-          setInitialRegion(region);
-        },
-        (error) => console.log(error),
-        {
-          enableHighAccuracy: true,
-          timeout: 20000,
-          maximumAge: 1000,
-        }
-      );
-      await getCurrentLocation();
-    };
+    (async () => {
+      let { status } = await Location.requestForegroundPermissionsAsync();
+      if (status !== "granted") {
+        setErrorMsg("Permission to access location was denied");
+        return;
+      }
+
+      let location = await Location.getCurrentPositionAsync({});
+      setPosition({
+        latitude: location.coords.latitude,
+        longitude: location.coords.longitude,
+        latitudeDelta: 0.05,
+        longitudeDelta: 0.05,
+      });
+    })();
   }, []);
 
   return (
     <View>
-      <MapView
-        style={styles.map}
-        initialRegion={{
-          latitude: 10.7292998,
-          longitude: 105.7751981,
-          latitudeDelta: 2,
-          longitudeDelta: 2,
-        }}
-        showsUserLocation={true}
-      >
-        {markers.map((item, idx) => (
-          <MapView.Marker
-            coordinate={{ latitude: item.latitude, longitude: item.longitude }}
-            title={item.title}
-            description={item.description}
-            key={idx}
+      {position && (
+        <MapView
+          MapView
+          style={styles.map}
+          initialRegion={position}
+          showsUserLocation={true}
+          showsMyLocationButton={true}
+          followsUserLocation={true}
+          showsCompass={true}
+          scrollEnabled={true}
+          zoomEnabled={true}
+          pitchEnabled={true}
+          rotateEnabled={true}
+        >
+          <Marker
+            title="Yor are here"
+            description="User location"
+            coordinate={position}
           />
-        ))}
-      </MapView>
+          {markers.map((item, idx) => (
+            <Marker
+              coordinate={{
+                latitude: item.latitude,
+                longitude: item.longitude,
+              }}
+              title={item.title}
+              description={item.description}
+              key={idx}
+            />
+          ))}
+        </MapView>
+      )}
     </View>
   );
 };

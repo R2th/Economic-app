@@ -4,6 +4,7 @@ module.exports = function (api) {
     presets: ["babel-preset-expo"],
     plugins: [
       "react-native-classname-to-style",
+      "react-native-reanimated/plugin",
       ["react-native-platform-specific-extensions", { extensions: ["css"] }],
     ],
   };
