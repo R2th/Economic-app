@@ -33,7 +33,7 @@ const CustomText = (props) => {
 const styles = StyleSheet.create({
   text: {
     fontSize: 14,
-    fontFamily: "Rubik",
+    // fontFamily: "Rubik",
   },
 });
 

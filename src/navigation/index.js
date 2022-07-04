@@ -2,9 +2,9 @@ import * as React from "react";
 import { Text, View } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
 // Icon
-import { AntDesign } from "@expo/vector-icons";
+import { AntDesign, Feather, MaterialCommunityIcons } from "@expo/vector-icons";
 // Color
 import Colors from "../utils/Colors.js";
 // Title
@@ -12,8 +12,10 @@ import LogoTitle from "../components/LogoTitle/index.js";
 // Tab
 import HomeScreen from "../screens/Home/index.js";
 import CartScreen from "../screens/Cart/index.js";
+import MapScreen from "../screens/Map/index.js";
+import DetailScreen from "../screens/Details/index.js";
 
-function NotFoundScreen() {
+function NotFoundScreen(props) {
   return (
     <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
       <Text style={{ fontSize: 20, fontWeight: "bold" }}>Developing...</Text>
@@ -22,19 +24,21 @@ function NotFoundScreen() {
 }
 
 const Tab = createBottomTabNavigator();
-const TabScreen = () => {
+const TabScreen = ({ navigation }) => {
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({
         tabBarIcon: ({ focused }) => {
           let iconName;
           const color = focused ? "#fed922" : Colors.grey;
-          if (route.name === "HomeTab") {
+          if (route.name === "Home") {
             iconName = "home";
           } else if (route.name === "Favorite") {
             iconName = "hearto";
           } else if (route.name === "Cart") {
             iconName = "shoppingcart";
+          } else if (route.name === "Map") {
+            return <Feather name="map-pin" size={28} color={color} />;
           }
           return <AntDesign name={iconName} size={28} color={color} />;
         },
@@ -49,7 +53,7 @@ const TabScreen = () => {
       inactiveColor={Colors.grey}
     >
       <Tab.Screen
-        name="HomeTab"
+        name="Home"
         component={HomeScreen}
         options={({ navigation, route }) => ({
           headerTitle: (props) => <LogoTitle {...props} />,
@@ -64,6 +68,13 @@ const TabScreen = () => {
         })}
       />
       <Tab.Screen
+        name="Map"
+        component={MapScreen}
+        options={() => ({
+          tabBarLabel: "Bản đồ",
+        })}
+      />
+      <Tab.Screen
         name="Cart"
         component={CartScreen}
         options={() => ({
@@ -75,7 +86,7 @@ const TabScreen = () => {
   );
 };
 
-//Drawer
+const Stack = createNativeStackNavigator();
 
 export default function Navigation() {
   const drawers = [
@@ -126,7 +137,18 @@ export default function Navigation() {
           ))}
         </Drawer.Navigator>
       </Host> */}
-      <TabScreen />
+      <Stack.Navigator
+        screenOptions={{
+          headerShown: false,
+        }}
+      >
+        <Stack.Screen name="HomeTab" component={TabScreen} />
+        <Stack.Screen
+          name="Details"
+          component={DetailScreen}
+          getId={({ params }) => params.id}
+        />
+      </Stack.Navigator>
     </NavigationContainer>
   );
 }

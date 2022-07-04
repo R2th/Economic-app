@@ -13,10 +13,11 @@ import CustomText from "../../components/UI/CustomText";
 import { CartContext } from "../../contexts/CartContext";
 // Icon
 import { AntDesign } from "@expo/vector-icons";
+import ShowMoreText from "./ShowMoreText";
 
 const sample_data = require("../../utils/sample_data/shoes.json");
 
-const HomeScreen = () => {
+const HomeScreen = ({ navigation }) => {
   const { state, action } = React.useContext(CartContext);
 
   return (
@@ -33,79 +34,85 @@ const HomeScreen = () => {
         <CustomText style={styles.cardTitle}>Our Products</CustomText>
         <View style={styles.cardBody}>
           <ScrollView style={styles.shopItems}>
-            {sample_data.shoes.map((item) => {
-              let isAvailable = true;
-              state.forEach((_item, idx) => {
-                if (item.id === _item.id) {
-                  isAvailable = false;
-                  return;
-                }
-              });
-              return (
-                <View style={styles.shopItem} key={item.id}>
-                  <View
-                    style={{
-                      backgroundColor: "rgb(225, 231, 237)",
-                      borderRadius: 30,
-                      height: 380,
-                      display: "flex",
-                      alignItems: "center",
-                      overflow: "hidden",
-                      ...Platform.select({
-                        ios: {
-                          shadowColor: "black",
-                          shadowOpacity: 0.5,
-                          shadowRadius: 5,
-                        },
-                        android: {
-                          elevation: 15,
-                        },
-                      }),
-                    }}
-                  >
-                    <Image
-                      style={styles.shopItemImage}
-                      source={{ uri: item.image }}
-                    />
-                  </View>
-
-                  <View>
-                    <Text style={styles.shopItemName}>{item.name}</Text>
-                  </View>
-                  <View>
-                    <Text style={styles.shopItemDescription}>
-                      {item.description}
-                    </Text>
-                  </View>
-                  <View style={styles.shopItemBottom}>
-                    <View>
-                      <Text style={styles.shopItemPrice}>${item.price}</Text>
+            <>
+              {sample_data.shoes.map((item) => {
+                let isAvailable = true;
+                state.forEach((_item, idx) => {
+                  if (item.id === _item.id) {
+                    isAvailable = false;
+                    return;
+                  }
+                });
+                return (
+                  <View style={styles.shopItem} key={item.id}>
+                    <View
+                      style={{
+                        backgroundColor: "rgb(225, 231, 237)",
+                        borderRadius: 30,
+                        height: 380,
+                        display: "flex",
+                        alignItems: "center",
+                        overflow: "hidden",
+                        ...Platform.select({
+                          ios: {
+                            shadowColor: "black",
+                            shadowOpacity: 0.5,
+                            shadowRadius: 5,
+                          },
+                          android: {
+                            elevation: 15,
+                          },
+                        }),
+                      }}
+                    >
+                      <Image
+                        style={styles.shopItemImage}
+                        source={{ uri: item.image }}
+                      />
                     </View>
-                    {isAvailable ? (
+
+                    <View>
+                      <Text style={styles.shopItemName}>{item.name}</Text>
+                    </View>
+                    <View>
+                      <ShowMoreText
+                        style={styles.shopItemDescription}
+                        content={item.description}
+                        navigation={navigation}
+                        id={item.id}
+                      />
+                    </View>
+                    <View style={styles.shopItemBottom}>
                       <View>
-                        <Text
-                          style={styles.shopItemButton}
-                          onPress={() => {
-                            action.addToCart(item);
-                          }}
-                        >
-                          ADD TO CART
-                        </Text>
+                        <Text style={styles.shopItemPrice}>${item.price}</Text>
                       </View>
-                    ) : (
-                      <View style={styles.shopItemButton}>
-                        <AntDesign
-                          name="check"
-                          size={20}
-                          color="#000"
-                          style={{ overflow: "visible" }}
-                        />
-                      </View>
-                    )}
+                      {isAvailable ? (
+                        <View>
+                          <Text
+                            style={styles.shopItemButton}
+                            onPress={() => {
+                              action.addToCart(item);
+                            }}
+                          >
+                            ADD TO CART
+                          </Text>
+                        </View>
+                      ) : (
+                        <View style={styles.shopItemButton}>
+                          <AntDesign
+                            name="check"
+                            size={20}
+                            color="#000"
+                            style={{ overflow: "visible" }}
+                          />
+                        </View>
+                      )}
+                    </View>
                   </View>
-                </View>
-              );
-            })}
+                );
+              })}
+              <View style={{ marginBottom: 350 }}></View>
+            </>
           </ScrollView>
         </View>
       </View>
@@ -183,7 +190,6 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     marginTop: 26,
     marginBottom: 20,
-    fontFamily: "Rubik-Regular",
   },
   shopItemDescription: {
     fontSize: 13,
@@ -199,6 +205,7 @@ const styles = StyleSheet.create({
   shopItemPrice: {
     fontSize: 18,
     fontWeight: "bold",
+    color: "#0f7e4a",
   },
   shopItemButton: {
     backgroundColor: "#f6c90e",
