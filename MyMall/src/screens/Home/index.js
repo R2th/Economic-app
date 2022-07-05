@@ -7,6 +7,7 @@ import {
   ScrollView,
   Platform,
   SafeAreaView,
+  TouchableOpacity,
 } from "react-native";
 // import styles from "../../../App.module.css";
 import CustomText from "../../components/UI/CustomText";
@@ -20,20 +21,29 @@ const sample_data = require("../../utils/sample_data/shoes.json");
 const HomeScreen = ({ navigation }) => {
   const { state, action } = React.useContext(CartContext);
 
+  const scrollRef = React.useRef();
+
+  const onPressTouch = () => {
+    scrollRef.current?.scrollTo({
+      y: 0,
+      animated: true,
+    });
+  };
+
   return (
     <SafeAreaView style={{ backgroundColor: "white", marginTop: 20 }}>
       <View style={styles.halfCircle}></View>
       <View style={styles.card}>
         <View style={styles.halfCircle2}></View>
-        <View style={styles.cardTop}>
+        <TouchableOpacity style={styles.cardTop} onPress={onPressTouch}>
           <Image
             style={styles.cardTopLogo}
             source={require("../../assets/Images/nike.png")}
           />
-        </View>
+        </TouchableOpacity>
         <CustomText style={styles.cardTitle}>Our Products</CustomText>
         <View style={styles.cardBody}>
-          <ScrollView style={styles.shopItems}>
+          <ScrollView style={styles.shopItems} ref={scrollRef}>
             <>
               {sample_data.shoes.map((item) => {
                 let isAvailable = true;
@@ -87,9 +97,9 @@ const HomeScreen = ({ navigation }) => {
                         <Text style={styles.shopItemPrice}>${item.price}</Text>
                       </View>
                       {isAvailable ? (
-                        <View>
+                        <View style={styles.shopItemButton}>
                           <Text
-                            style={styles.shopItemButton}
+                            style={{ fontWeight: "900", fontSize: 14 }}
                             onPress={() => {
                               action.addToCart(item);
                             }}
@@ -209,8 +219,7 @@ const styles = StyleSheet.create({
   },
   shopItemButton: {
     backgroundColor: "#f6c90e",
-    fontWeight: "900",
-    fontSize: 14,
+
     width: "auto",
     height: 46,
     paddingVertical: 16,

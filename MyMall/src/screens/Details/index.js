@@ -57,7 +57,7 @@ const DetailScreen = (props) => {
                 marginRight: -10,
                 zIndex: 1,
               }}
-            ></View>
+            />
             <Text
               style={{
                 fontSize: 20,
@@ -89,47 +89,49 @@ const DetailScreen = (props) => {
             Rating
           </Text>
           <View>
-            {product.rating.map((item) => {
-              const sum = product.rating.reduce(
-                (prevState, item) => prevState + item,
-                0
-              );
-              return (
-                <View
-                  style={{
-                    display: "flex",
-                    flexDirection: "row",
-                    width: "100%",
-                    alignItems: "center",
-                    justifyContent: "space-between",
-                  }}
-                >
-                  <Text style={{ fontWeight: "bold" }}>{item}</Text>
+            {product.rating &&
+              product.rating.map((item, idx) => {
+                const sum = product.rating.reduce(
+                  (prevState, item) => prevState + item,
+                  0
+                );
+                return (
                   <View
                     style={{
-                      height: 20,
-                      backgroundColor: "#eee",
-                      borderColor: "#0f7e4a",
-                      borderWidth: 1,
-                      marginBottom: 8,
-                      marginLeft: 20,
-                      borderRadius: 8,
-                      marginRight: 15,
-                      width: "80%",
+                      display: "flex",
+                      flexDirection: "row",
+                      width: "100%",
+                      alignItems: "center",
+                      justifyContent: "space-between",
                     }}
+                    key={idx}
                   >
+                    <Text style={{ fontWeight: "bold" }}>{item}</Text>
                     <View
                       style={{
-                        width: `${(item / sum).toFixed(2) * 100}%`,
-                        backgroundColor: "#fed922",
-                        height: 18,
+                        height: 20,
+                        backgroundColor: "#eee",
+                        borderColor: "#0f7e4a",
+                        borderWidth: 1,
+                        marginBottom: 8,
+                        marginLeft: 20,
                         borderRadius: 8,
+                        marginRight: 15,
+                        width: "80%",
                       }}
-                    ></View>
+                    >
+                      <View
+                        style={{
+                          width: `${(item / sum).toFixed(2) * 100}%`,
+                          backgroundColor: "#fed922",
+                          height: 18,
+                          borderRadius: 8,
+                        }}
+                      ></View>
+                    </View>
                   </View>
-                </View>
-              );
-            })}
+                );
+              })}
           </View>
         </View>
         <View style={styles.section}>

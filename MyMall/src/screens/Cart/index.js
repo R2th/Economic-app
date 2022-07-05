@@ -15,19 +15,22 @@ import { CartContext } from "../../contexts/CartContext";
 
 const card = require("../../utils/sample_data/cart.json");
 
-const CartScreen = () => {
+const CartScreen = ({ navigation }) => {
   const { action, state } = React.useContext(CartContext);
   return (
     <SafeAreaView style={{ backgroundColor: "white", marginTop: 20 }}>
       <View style={styles.halfCircle}></View>
       <View style={styles.card}>
         <View style={styles.halfCircle2}></View>
-        <View style={styles.cardTop}>
+        <TouchableOpacity
+          style={styles.cardTop}
+          onPress={() => navigation.navigate("Home")}
+        >
           <Image
             style={styles.cardTopLogo}
             source={require("../../assets/Images/nike.png")}
           />
-        </View>
+        </TouchableOpacity>
         <View
           style={{
             display: "flex",
@@ -44,68 +47,101 @@ const CartScreen = () => {
         </View>
         <View style={styles.cardBody}>
           <ScrollView style={styles.cartItems}>
-            {state.length ? (
-              state.map((item, idx) => (
-                <View style={styles.cartItem} key={idx}>
-                  <View style={styles.cartItemLeft}>
-                    <View style={styles.cartItemImage}>
-                      <View style={styles.cartItemsImageBlock}>
-                        <Image
-                          source={{ uri: item.image }}
-                          style={{
-                            width: "140%",
-                            height: "80%",
-                            transform: [{ rotate: "-28deg" }],
-                          }}
-                        />
+            <>
+              {" "}
+              {state.length ? (
+                state.map((item, idx) => (
+                  <View style={styles.cartItem} key={idx}>
+                    <View style={styles.cartItemLeft}>
+                      <View style={styles.cartItemImage}>
+                        <View style={styles.cartItemsImageBlock}>
+                          <Image
+                            source={{ uri: item.image }}
+                            style={{
+                              width: "140%",
+                              height: "80%",
+                              transform: [{ rotate: "-28deg" }],
+                            }}
+                          />
+                        </View>
+                      </View>
+                    </View>
+                    <View style={styles.cartItemRight}>
+                      <Text style={styles.cartItemName}>{item.name}</Text>
+                      <Text style={styles.cartItemPrice}>$ {item.price}</Text>
+                      <View style={styles.cartItemActions}>
+                        <View style={styles.cartItemCount}>
+                          <View style={styles.cartItemCountButton}>
+                            <Text
+                              style={styles.cartItemCountButtonText}
+                              onPress={() => {
+                                if (item.count === 1) {
+                                  action.removeFromCart(item.id);
+                                } else {
+                                  action.updateNumberProducts(item.id, -1);
+                                }
+                              }}
+                            >
+                              -
+                            </Text>
+                          </View>
+                          <Text style={styles.cartItemCountNumber}>
+                            {item.count}
+                          </Text>
+                          <View style={styles.cartItemCountButton}>
+                            <Text
+                              style={styles.cartItemCountButtonText}
+                              onPress={() =>
+                                action.updateNumberProducts(item.id, 1)
+                              }
+                            >
+                              +
+                            </Text>
+                          </View>
+                        </View>
+                        <TouchableOpacity
+                          style={styles.cartItemRemove}
+                          onPress={() => action.removeFromCart(item.id)}
+                        >
+                          <Image
+                            source={require("../../assets/Images/trash.png")}
+                            style={styles.cartItemRemoveIcon}
+                          />
+                        </TouchableOpacity>
                       </View>
                     </View>
                   </View>
-                  <View style={styles.cartItemRight}>
-                    <Text style={styles.cartItemName}>{item.name}</Text>
-                    <Text style={styles.cartItemPrice}>$ {item.price}</Text>
-                    <View style={styles.cartItemActions}>
-                      <View style={styles.cartItemCount}>
-                        <Text
-                          style={styles.cartItemCountButton}
-                          onPress={() => {
-                            if (item.count === 1) {
-                              action.removeFromCart(item.id);
-                            } else {
-                              action.updateNumberProducts(item.id, -1);
-                            }
-                          }}
-                        >
-                          -
-                        </Text>
-                        <Text style={styles.cartItemCountNumber}>
-                          {item.count}
-                        </Text>
-                        <Text
-                          style={styles.cartItemCountButton}
-                          onPress={() =>
-                            action.updateNumberProducts(item.id, 1)
-                          }
-                        >
-                          +
-                        </Text>
-                      </View>
-                      <TouchableOpacity
-                        style={styles.cartItemRemove}
-                        onPress={() => action.removeFromCart(item.id)}
-                      >
-                        <Image
-                          source={require("../../assets/Images/trash.png")}
-                          style={styles.cartItemRemoveIcon}
-                        />
-                      </TouchableOpacity>
-                    </View>
+                ))
+              ) : (
+                <View>
+                  <Text>Your Cart is empty</Text>
+                  <View
+                    style={{
+                      backgroundColor: "#fed922",
+                      // paddingHorizontal: 10,
+                      borderRadius: 20,
+                      borderColor: "#000",
+                      marginRight: 20,
+                      marginTop: 20,
+                    }}
+                  >
+                    <Text
+                      onPress={() => navigation.navigate("Home")}
+                      style={{
+                        textAlign: "center",
+                        fontSize: 25,
+                        fontWeight: "bold",
+                        paddingVertical: 10,
+                        color: "#eee",
+                      }}
+                    >
+                      Back to Home
+                    </Text>
                   </View>
                 </View>
-              ))
-            ) : (
-              <Text>Your Cart is empty</Text>
-            )}
+              )}
+              <View style={{ marginBottom: 350 }}></View>
+            </>
           </ScrollView>
         </View>
       </View>
@@ -212,15 +248,11 @@ const styles = StyleSheet.create({
   cartItemCountButton: {
     width: 28,
     height: 28,
-    lineHeight: 28,
     borderRadius: 28,
     backgroundColor: "#eee",
-    fontSize: 16,
-    fontWeight: "bold",
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
-    textAlign: "center",
     ...Platform.select({
       ios: {
         shadowColor: "black",
@@ -232,6 +264,12 @@ const styles = StyleSheet.create({
       },
     }),
     marginRight: 10,
+  },
+  cartItemCountButtonText: {
+    fontSize: 16,
+    fontWeight: "bold",
+    textAlign: "center",
+    lineHeight: 28,
   },
   cartItemRemove: {
     width: 28,

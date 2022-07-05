@@ -101,17 +101,16 @@ const MapScreen = () => {
             description="User location"
             coordinate={position}
           >
-            <AntDesign
-              name="user"
-              size={25}
-              color="#fed922"
+            <View
               style={{
                 backgroundColor: "rgb(77, 49, 127)",
                 padding: 8,
                 borderRadius: 30,
                 zIndex: 2,
               }}
-            />
+            >
+              <AntDesign name="user" size={25} color="#fed922" />
+            </View>
             <View
               style={{
                 width: 15,
@@ -121,6 +120,7 @@ const MapScreen = () => {
                 marginTop: -10,
                 transform: [{ rotate: "-45deg" }],
                 zIndex: 1,
+                overflow: "hidden",
               }}
             />
           </Marker>
@@ -134,18 +134,20 @@ const MapScreen = () => {
               description={item.description}
               key={idx}
             >
-              <MaterialCommunityIcons
-                name="shoe-sneaker"
-                size={30}
-                color="#fed922"
+              <View
                 style={{
                   backgroundColor: "rgb(77, 49, 127)",
-                  padding: 3,
+                  padding: 8,
                   borderRadius: 30,
-                  transform: [{ rotate: "-28deg" }],
                   zIndex: 2,
                 }}
-              />
+              >
+                <MaterialCommunityIcons
+                  name="shoe-sneaker"
+                  size={30}
+                  color="#fed922"
+                />
+              </View>
               <View
                 style={{
                   width: 15,
