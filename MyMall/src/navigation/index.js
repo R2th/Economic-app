@@ -4,7 +4,7 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 // Icon
-import { AntDesign, Feather, MaterialCommunityIcons } from "@expo/vector-icons";
+import { AntDesign, Feather } from "@expo/vector-icons";
 // Color
 import Colors from "../utils/Colors.js";
 // Title
@@ -15,7 +15,7 @@ import CartScreen from "../screens/Cart/index.js";
 import MapScreen from "../screens/Map/index.js";
 import DetailScreen from "../screens/Details/index.js";
 
-function NotFoundScreen(props) {
+function NotFoundScreen() {
   return (
     <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
       <Text style={{ fontSize: 20, fontWeight: "bold" }}>Developing...</Text>
@@ -24,7 +24,7 @@ function NotFoundScreen(props) {
 }
 
 const Tab = createBottomTabNavigator();
-const TabScreen = ({ navigation }) => {
+const TabScreen = () => {
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({

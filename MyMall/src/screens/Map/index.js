@@ -3,6 +3,8 @@ import { View, StyleSheet } from "react-native";
 import MapView, { Marker } from "react-native-maps";
 import * as Location from "expo-location";
 
+import { MaterialCommunityIcons, AntDesign } from "@expo/vector-icons";
+
 const markers = [
   // {
   //   latitude: 45,
@@ -32,6 +34,7 @@ const markers = [
 
 const MapScreen = () => {
   const [position, setPosition] = React.useState();
+  const [markersCustom, setMarkersCustom] = React.useState(markers);
 
   React.useEffect(() => {
     (async () => {
@@ -50,6 +53,32 @@ const MapScreen = () => {
       });
     })();
   }, []);
+
+  React.useEffect(() => {
+    if (position) {
+      [
+        [1, 1],
+        [1, -1],
+        [-1, 1],
+        [-1, -1],
+      ].map((value) => {
+        for (let i = 0; i < 3; i++) {
+          let random_latitude = Math.random();
+          let random_longitude = Math.random();
+          setMarkersCustom((prevState) => [
+            ...prevState,
+            {
+              latitude: random_latitude * 0.05 * value[0] + position.latitude,
+              longitude:
+                random_longitude * 0.05 * value[1] + position.longitude,
+              title: "Shop sneaker",
+              subtitle: "Shop giày sneaker",
+            },
+          ]);
+        }
+      });
+    }
+  }, [position]);
 
   return (
     <View>
@@ -71,8 +100,31 @@ const MapScreen = () => {
             title="Yor are here"
             description="User location"
             coordinate={position}
-          />
-          {markers.map((item, idx) => (
+          >
+            <AntDesign
+              name="user"
+              size={25}
+              color="#fed922"
+              style={{
+                backgroundColor: "rgb(77, 49, 127)",
+                padding: 8,
+                borderRadius: 30,
+                zIndex: 2,
+              }}
+            />
+            <View
+              style={{
+                width: 15,
+                height: 15,
+                backgroundColor: "rgb(77, 49, 127)",
+                alignSelf: "center",
+                marginTop: -10,
+                transform: [{ rotate: "-45deg" }],
+                zIndex: 1,
+              }}
+            />
+          </Marker>
+          {markersCustom.map((item, idx) => (
             <Marker
               coordinate={{
                 latitude: item.latitude,
@@ -81,7 +133,31 @@ const MapScreen = () => {
               title={item.title}
               description={item.description}
               key={idx}
-            />
+            >
+              <MaterialCommunityIcons
+                name="shoe-sneaker"
+                size={30}
+                color="#fed922"
+                style={{
+                  backgroundColor: "rgb(77, 49, 127)",
+                  padding: 3,
+                  borderRadius: 30,
+                  transform: [{ rotate: "-28deg" }],
+                  zIndex: 2,
+                }}
+              />
+              <View
+                style={{
+                  width: 15,
+                  height: 15,
+                  backgroundColor: "rgb(77, 49, 127)",
+                  alignSelf: "center",
+                  marginTop: -10,
+                  transform: [{ rotate: "-45deg" }],
+                  zIndex: 1,
+                }}
+              />
+            </Marker>
           ))}
         </MapView>
       )}
