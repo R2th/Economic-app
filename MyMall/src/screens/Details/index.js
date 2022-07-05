@@ -58,11 +58,8 @@ const DetailScreen = (props) => {
                 zIndex: 1,
               }}
             />
-            <Text
+            <View
               style={{
-                fontSize: 20,
-                fontWeight: "bold",
-                color: product.color,
                 backgroundColor: "#fed922",
                 borderBottomRightRadius: 10,
                 borderTopRightRadius: 10,
@@ -70,8 +67,16 @@ const DetailScreen = (props) => {
                 paddingRight: 10,
               }}
             >
-              {product.color}
-            </Text>
+              <Text
+                style={{
+                  fontSize: 20,
+                  fontWeight: "bold",
+                  color: product.color,
+                }}
+              >
+                {product.color}
+              </Text>
+            </View>
           </View>
           <Text
             style={{
@@ -81,7 +86,7 @@ const DetailScreen = (props) => {
               marginRight: 10,
             }}
           >
-            {product.price} $
+            {product.price.toFixed(2)} $
           </Text>
         </View>
         <View style={styles.section}>

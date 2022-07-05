@@ -13,8 +13,6 @@ import {
 import CustomText from "../../components/UI/CustomText";
 import { CartContext } from "../../contexts/CartContext";
 
-const card = require("../../utils/sample_data/cart.json");
-
 const CartScreen = ({ navigation }) => {
   const { action, state } = React.useContext(CartContext);
   return (
@@ -48,7 +46,6 @@ const CartScreen = ({ navigation }) => {
         <View style={styles.cardBody}>
           <ScrollView style={styles.cartItems}>
             <>
-              {" "}
               {state.length ? (
                 state.map((item, idx) => (
                   <View style={styles.cartItem} key={idx}>

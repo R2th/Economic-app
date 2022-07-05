@@ -14,6 +14,7 @@ import HomeScreen from "../screens/Home/index.js";
 import CartScreen from "../screens/Cart/index.js";
 import MapScreen from "../screens/Map/index.js";
 import DetailScreen from "../screens/Details/index.js";
+import WishListScreen from "../screens/Favorites/index.js";
 
 function NotFoundScreen() {
   return (
@@ -62,7 +63,7 @@ const TabScreen = () => {
       />
       <Tab.Screen
         name="Favorite"
-        component={NotFoundScreen}
+        component={WishListScreen}
         options={() => ({
           tabBarLabel: "Yêu thích",
         })}

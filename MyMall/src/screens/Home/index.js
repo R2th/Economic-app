@@ -80,10 +80,7 @@ const HomeScreen = ({ navigation }) => {
                         source={{ uri: item.image }}
                       />
                     </View>
-
-                    <View>
-                      <Text style={styles.shopItemName}>{item.name}</Text>
-                    </View>
+                    <TitleProduct name={item.name} id={item.id} />
                     <View>
                       <ShowMoreText
                         style={styles.shopItemDescription}
@@ -94,7 +91,9 @@ const HomeScreen = ({ navigation }) => {
                     </View>
                     <View style={styles.shopItemBottom}>
                       <View>
-                        <Text style={styles.shopItemPrice}>${item.price}</Text>
+                        <Text style={styles.shopItemPrice}>
+                          ${item.price.toFixed(2)}
+                        </Text>
                       </View>
                       {isAvailable ? (
                         <View style={styles.shopItemButton}>
@@ -198,8 +197,6 @@ const styles = StyleSheet.create({
   shopItemName: {
     fontSize: 20,
     fontWeight: "bold",
-    marginTop: 26,
-    marginBottom: 20,
   },
   shopItemDescription: {
     fontSize: 13,
@@ -219,7 +216,6 @@ const styles = StyleSheet.create({
   },
   shopItemButton: {
     backgroundColor: "#f6c90e",
-
     width: "auto",
     height: 46,
     paddingVertical: 16,
@@ -231,5 +227,32 @@ const styles = StyleSheet.create({
     overflow: "visible",
   },
 });
+
+const TitleProduct = ({ name, id }) => {
+  const { wishList, action } = React.useContext(CartContext);
+
+  const isWishList = wishList.includes(id);
+
+  return (
+    <View
+      style={{
+        display: "flex",
+        flexDirection: "row",
+        marginTop: 26,
+        marginBottom: 20,
+        alignContent: "center",
+        justifyContent: "space-between",
+      }}
+    >
+      <Text style={styles.shopItemName}>{name}</Text>
+      <AntDesign
+        name={!isWishList ? "hearto" : "heart"}
+        size={24}
+        color="#fed922"
+        onPress={() => action.addToWishList(id)}
+      />
+    </View>
+  );
+};
 
 export default HomeScreen;

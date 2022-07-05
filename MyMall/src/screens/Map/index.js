@@ -140,6 +140,7 @@ const MapScreen = () => {
                   padding: 8,
                   borderRadius: 30,
                   zIndex: 2,
+                  transform: [{ rotate: "-28deg" }],
                 }}
               >
                 <MaterialCommunityIcons

@@ -4,6 +4,7 @@ const CartContext = React.createContext();
 
 const CartProvider = ({ children }) => {
   const [data, setData] = useState([]);
+  const [wishList, setWishList] = useState([]);
   const action = {
     addToCart: (item) => {
       let isAvailable = true;
@@ -36,10 +37,17 @@ const CartProvider = ({ children }) => {
         .reduce((prevState, item) => prevState + item.price * item.count, 0)
         .toFixed(2);
     },
+    addToWishList: (id) => {
+      if (!wishList.includes(id)) {
+        setWishList((prevState) => [...prevState, id]);
+      } else {
+        setWishList((prevState) => prevState.filter((item) => item !== id));
+      }
+    },
   };
 
   return (
-    <CartContext.Provider value={{ state: data, action }}>
+    <CartContext.Provider value={{ state: data, action, wishList }}>
       {children}
     </CartContext.Provider>
   );
